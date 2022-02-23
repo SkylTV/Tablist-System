@@ -1,0 +1,11 @@
+name: Tablist
+version: '${project.version}'
+main: de.saschag.tablist.main.Main
+api-version: 1.17
+authors: [ SaschaG ]
+commands:
+  tab:
+    aliases:
+      - tablist
+    description: Manage Tab and Chat
+

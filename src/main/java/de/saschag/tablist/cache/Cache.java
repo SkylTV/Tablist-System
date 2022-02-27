@@ -1,6 +1,6 @@
 package de.saschag.tablist.cache;
 
-import de.saschag.tablist.config.ConfigManager;
+import de.saschag.tablist.config.FileManager;
 import de.saschag.tablist.config.FormatableString;
 import de.saschag.tablist.main.Core;
 import org.bukkit.command.CommandSender;
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class Cache {
 
-    public ConfigManager configManager;
+    public FileManager.Config configManager;
     public HashMap<String, Data> cache;
     public HashMap<CommandSender, Setup> setup;
     public Cache(){
@@ -20,9 +20,9 @@ public class Cache {
     }
 
     public void loadGroups(){
-        if(configManager.getFileConfiguration().getConfigurationSection("groups")== null || Objects.requireNonNull(configManager.getFileConfiguration().getConfigurationSection("groups")).getKeys(false).isEmpty())
+        if(configManager.get().getConfigurationSection("groups")== null || Objects.requireNonNull(configManager.get().getConfigurationSection("groups")).getKeys(false).isEmpty())
             return;
-        Objects.requireNonNull(configManager.getFileConfiguration().getConfigurationSection("groups")).getKeys(false).forEach(string -> cache.put(string, new Data(configManager.getString("groups." + string).getString(), checkWorking(configManager.getString("groups." + string).getString()))));
+        Objects.requireNonNull(configManager.get().getConfigurationSection("groups")).getKeys(false).forEach(string -> cache.put(string, new Data(configManager.getString("groups." + string).getString(), checkWorking(configManager.getString("groups." + string).getString()))));
         Core.getCore().log(Core.getCore().getPrefix() + "§aGroups Cache loaded");
     }
 
@@ -35,13 +35,15 @@ public class Cache {
         return true;
     }
     public void saveGroups(){
-        configManager.setString("groups", null);
+        configManager.reload();
+        configManager.set("groups", null);
         configManager.save();
         if(cache == null || cache.isEmpty())
             return;
+
         cache.forEach((string, data) ->{
             if(data.getSplit() != null && data.getSplit().length != 0 && data.getPermission() != null && data.getWeight() != 0 && data.getChatPrefix() != null && data.getTabPrefix() != null){
-                configManager.setString("groups." + string, data.getPermission() + ";" + data.getWeight() + ";" + data.getTabPrefix().replace("§", "&") + ";" + data.getChatPrefix().replace("§", "&"));
+                configManager.set("groups." + string, data.getPermission() + ";" + data.getWeight() + ";" + data.getTabPrefix().replace("§", "&") + ";" + data.getChatPrefix().replace("§", "&"));
                 configManager.save();
             }
         });
@@ -52,7 +54,7 @@ public class Cache {
         return setup;
     }
     public void setSetup(CommandSender sender, int step, String group){
-        if(step > 5) return;
+        if(step > 9) return;
         if(step < 1) return;
         if(!setup.containsKey(sender))
             setup.put(sender, new Setup(group, step));
@@ -69,6 +71,20 @@ public class Cache {
             sender.sendMessage(Core.getCore().getPrefix() + "§4Du kannst jederzeit im Chat mit 'cancel' abbrechen");
         }else if(step == 4){
             sender.sendMessage(Core.getCore().getPrefix() + "§6Gebe nun im Chat die Prefix für den Chat ein für die Gruppe §b" + group + "§6. Beispiel: §7" + group + " §8| §7%spieler% §8>");
+            sender.sendMessage(Core.getCore().getPrefix() + "§6Benutze %spieler% um an dieser stelle den Spielernamen anzeigen zu lassen.");
+            sender.sendMessage(Core.getCore().getPrefix() + "§4Du kannst jederzeit im Chat mit 'cancel' abbrechen");
+        }else if(step == 5){
+            sender.sendMessage(Core.getCore().getPrefix() + "§6Gebe nun im Chat die änderung der Permission für die Gruppe §b" + group + "§6 ein. Beispiel: §egroup." + group);
+            sender.sendMessage(Core.getCore().getPrefix() + "§4Du kannst jederzeit im Chat mit 'cancel' abbrechen");
+        }else if(step == 6){
+            sender.sendMessage(Core.getCore().getPrefix() + "§6Gebe nun im Chat die änderung der Platzierung für die Gruppe §b" + group + "§6 ein. Beispiel: §e1");
+            sender.sendMessage(Core.getCore().getPrefix() + "§4Du kannst jederzeit im Chat mit 'cancel' abbrechen");
+        }else if(step == 7){
+            sender.sendMessage(Core.getCore().getPrefix() + "§6Gebe nun im Chat die änderung der Tablist-Prefix für die Gruppe §b" + group + "§6 ein. Beispiel: §e" + group + " §8| ");
+            sender.sendMessage(Core.getCore().getPrefix() + "§6Du kannst auch Colorcodes benutzen wie beispielsweise '&7Test'");
+            sender.sendMessage(Core.getCore().getPrefix() + "§4Du kannst jederzeit im Chat mit 'cancel' abbrechen");
+        }else if(step == 8){
+            sender.sendMessage(Core.getCore().getPrefix() + "§6Gebe nun im Chat die änderung der Chat-Prefix für die Gruppe §b" + group + "§6 ein. Beispiel: §7" + group + " §8| §7%spieler% §8>");
             sender.sendMessage(Core.getCore().getPrefix() + "§6Benutze %spieler% um an dieser stelle den Spielernamen anzeigen zu lassen.");
             sender.sendMessage(Core.getCore().getPrefix() + "§4Du kannst jederzeit im Chat mit 'cancel' abbrechen");
         }else return;

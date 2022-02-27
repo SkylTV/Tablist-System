@@ -2,9 +2,11 @@
 # Coded By SaschaG #
 ####################
 messages:
-  # Type %prefix% to add the prefix in the message
   prefix: "&6Tablist &8>&r "
   nopermission: "%prefix% &cDazu hast du keine Rechte"
+config:
+  autoUpdate: false
+  updatePerSeconds: 15
 permissions:
   permission*: tablist.*
   createGroup: tablist.create
@@ -12,11 +14,9 @@ permissions:
   reload: tablist.reload
   save: tablist.save
   editGroup: tablist.edit
-
+  list: tablist.list
+  info: tablist.info
 groups:
-  # 1.Permission for group
-  # 2.Placement in Tablist
-  # 3.Tablist prefix
-  # 4.Chat prefix
-  owner: group.owner;1;&4Owner &7| &r;&4Owner &7> &r
+
+
 

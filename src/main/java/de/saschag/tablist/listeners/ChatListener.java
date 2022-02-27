@@ -24,9 +24,9 @@ public class ChatListener implements Listener {
         if(setup.getSetup() == 0)return;
         event.setCancelled(true);
         if(message.contains("cancel")){
-            Core.getCore().getCache().getCache().remove(setup.getName());
             Core.getCore().getCache().getSetup().remove(player);
             player.sendMessage(Core.getCore().getPrefix() + "§cSetup erfolgreich abgebrochen");
+            return;
         }
         if(setup.getSetup() == 1){
             if(message.equalsIgnoreCase("") || message.equalsIgnoreCase(" ")) {
@@ -68,6 +68,39 @@ public class ChatListener implements Listener {
             Core.getCore().getCache().getSetup().remove(player);
             player.sendMessage(Core.getCore().getPrefix() + "§aSetup erfolgreich beendet.");
         }
+        if(setup.getSetup() == 5){
+            if(message.equalsIgnoreCase("") || message.equalsIgnoreCase(" ")) {
+                player.sendMessage(Core.getCore().getPrefix() + "§cBitte gebe eine richtige Permission ein");
+                return;
+            }
+            Core.getCore().getCache().getCache().get(setup.getName()).setPermission(message);
+            player.sendMessage(Core.getCore().getPrefix() + "§aPermission erfolgreich zu §e"+message+" §ageändert.");
+            Core.getCore().getCache().getSetup().remove(player);
+        }else if(setup.getSetup() == 6){
+            if(message.equalsIgnoreCase("") || message.equalsIgnoreCase(" ") || !Core.getCore().isStringNumeric(message)) {
+                player.sendMessage(Core.getCore().getPrefix() + "§cBitte gebe eine richtige Zahl an");
+                return;
+            }
+            Core.getCore().getCache().getCache().get(setup.getName()).setWeight(Integer.parseInt(message));
+            player.sendMessage(Core.getCore().getPrefix() + "§aPlatzierung erfolgreich zu §e"+message+" §ageändert.");
+            Core.getCore().getCache().getSetup().remove(player);
+        }else if(setup.getSetup() == 7){
+            if(message.equalsIgnoreCase("") || message.equalsIgnoreCase(" ")) {
+                player.sendMessage(Core.getCore().getPrefix() + "§cGebe eine richtige Prefix ein");
+                return;
+            }
+            Core.getCore().getCache().getCache().get(setup.getName()).setTabPrefix(message);
+            player.sendMessage(Core.getCore().getPrefix() + "§aTablist-Prefix erfolgreich zu §e"+message+" §ageändert.");
+            Core.getCore().getCache().getSetup().remove(player);
+        }else if(setup.getSetup() == 8){
+            if(message.equalsIgnoreCase("") || message.equalsIgnoreCase(" ")) {
+                player.sendMessage(Core.getCore().getPrefix() + "§cGebe eine richtige Prefix ein");
+                return;
+            }
+            Core.getCore().getCache().getCache().get(setup.getName()).setChatPrefix(message);
+            player.sendMessage(Core.getCore().getPrefix() + "§aChat-Prefix erfolgreich zu §e"+message+" §ageändert.");
+            Core.getCore().getCache().getSetup().remove(player);
+        }
     }
 
     @EventHandler
@@ -76,15 +109,22 @@ public class ChatListener implements Listener {
         ArrayList<String> group = new ArrayList<>();
         Core.getCore().getCache().getCache().forEach((name, data) ->{
             if(group.isEmpty()){
-                Permission perm = new Permission(data.getPermission(), PermissionDefault.FALSE);
-                if(player.hasPermission(perm)){
-                    group.add(name);
+                if(data.getPermission() != null){
+                    Permission perm = new Permission(data.getPermission(), PermissionDefault.FALSE);
+                    if(player.hasPermission(perm)){
+                        group.add(name);
+                    }
                 }
             }
         });
         if(group.isEmpty()) return;
-        String prefix = ChatColor.translateAlternateColorCodes('&', Core.getCore().getCache().getCache().get(group.get(0)).getChatPrefix().replace("%spieler%", "%s")) + event.getMessage();
-        event.setFormat(prefix);
+        try{
+            String prefix = ChatColor.translateAlternateColorCodes('&', Core.getCore().getCache().getCache().get(group.get(0)).getChatPrefix().replace("%spieler%", "%s")) + event.getMessage();
+            event.setFormat(prefix);
+        }catch (Exception ex){
+
+        }
+
     }
 
 }

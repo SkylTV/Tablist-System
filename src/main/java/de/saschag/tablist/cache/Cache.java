@@ -66,7 +66,7 @@ public class Cache {
             sender.sendMessage(Core.getCore().getPrefix() + "§6Gebe nun im Chat die Platzierung in der Tablist für die Gruppe §b" + group + "§6 ein. Beispiel: §e2");
             sender.sendMessage(Core.getCore().getPrefix() + "§4Du kannst jederzeit im Chat mit 'cancel' abbrechen");
         }else if(step == 3){
-            sender.sendMessage(Core.getCore().getPrefix() + "§6Gebe nun im Chat die Prefix für die Tablist ein für die Gruppe §b" + group + "§6 Beispiel: §e" + group + " §8| ");
+            sender.sendMessage(Core.getCore().getPrefix() + "§6Gebe nun im Chat die Prefix für die Tablist ein für die Gruppe §b" + group + "§6 Beispiel: §e" + group + " §8| &7");
             sender.sendMessage(Core.getCore().getPrefix() + "§6Du kannst auch Colorcodes benutzen wie beispielsweise '&7Test'");
             sender.sendMessage(Core.getCore().getPrefix() + "§4Du kannst jederzeit im Chat mit 'cancel' abbrechen");
         }else if(step == 4){

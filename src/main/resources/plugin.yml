@@ -8,4 +8,5 @@ commands:
     aliases:
       - tablist
     description: Manage Tab and Chat
+permissions:
 

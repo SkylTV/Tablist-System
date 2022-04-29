@@ -4,10 +4,12 @@ import de.saschag.tablist.cache.Cache;
 import de.saschag.tablist.config.FileManager;
 import de.saschag.tablist.utils.Tablist;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.text.DecimalFormatSymbols;
+import java.util.HashMap;
 
 public class Core {
 
@@ -109,6 +111,26 @@ public class Core {
             }
         }
         return true;
+    }
+    public ChatColor translate(String id){
+        HashMap<String, ChatColor> colors = new HashMap<>();
+        colors.put("0", ChatColor.BLACK);
+        colors.put("1", ChatColor.DARK_BLUE);
+        colors.put("2", ChatColor.DARK_GREEN);
+        colors.put("3", ChatColor.DARK_AQUA);
+        colors.put("4", ChatColor.DARK_RED);
+        colors.put("5", ChatColor.DARK_PURPLE);
+        colors.put("6", ChatColor.GOLD);
+        colors.put("7", ChatColor.GRAY);
+        colors.put("8", ChatColor.DARK_GRAY);
+        colors.put("9", ChatColor.BLUE);
+        colors.put("a", ChatColor.GREEN);
+        colors.put("b", ChatColor.AQUA);
+        colors.put("c", ChatColor.RED);
+        colors.put("d", ChatColor.LIGHT_PURPLE);
+        colors.put("e", ChatColor.YELLOW);
+        colors.put("f", ChatColor.WHITE);
+        return colors.get(id);
     }
 
     public String getPrefix() {
